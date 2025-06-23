@@ -6,6 +6,11 @@ import re
 import os
 from datetime import datetime
 
+if not os.path.exists("requirements.txt"):
+    st.warning("No se encontró requirements.txt. Por favor, crea uno con las dependencias necesarias.")
+else:
+    st.info("Asegúrese de haber instalado las dependencias con: pip install -r requirements.txt")
+
 # --- CONFIGURACIÓN BASE ---
 ORACLE_HOST = "dlecd002.tia.com.ec"
 ORACLE_PORT = 1521
