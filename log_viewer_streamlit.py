@@ -1,15 +1,9 @@
 import streamlit as st
 import paramiko
 import cx_Oracle
-import getpass
 import re
 import os
 from datetime import datetime
-
-if not os.path.exists("requirements.txt"):
-    st.warning("No se encontró requirements.txt. Por favor, crea uno con las dependencias necesarias.")
-else:
-    st.info("Asegúrese de haber instalado las dependencias con: pip install -r requirements.txt")
 
 # --- CONFIGURACIÓN BASE ---
 ORACLE_HOST = "dlecd002.tia.com.ec"
@@ -21,15 +15,16 @@ ORACLE_PASSWORD = "wmstia2020"
 SSH_HOST = "alb-voicepicking.dev.aws.tia.com.ec"
 SSH_PORT = 22
 
-# --- CONEXIÓN SSH ---
-def conectar_ssh(usuario, clave):
+# --- CONEXIÓN SSH CON LLAVE PRIVADA ---
+def conectar_ssh_con_llave(usuario, ruta_llave):
     try:
+        key = paramiko.RSAKey.from_private_key_file(ruta_llave)
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        client.connect(SSH_HOST, port=SSH_PORT, username=usuario, password=clave)
+        client.connect(SSH_HOST, port=SSH_PORT, username=usuario, pkey=key)
         return client
     except Exception as e:
-        st.error(f"Error SSH: {e}")
+        st.error(f"Error SSH con llave: {e}")
         return None
 
 # --- CONEXIÓN ORACLE ---
@@ -87,12 +82,12 @@ if "ssh" not in st.session_state:
     st.session_state.ssh = None
 
 if menu == "Login":
-    usuario = st.text_input("Usuario SSH")
-    clave = st.text_input("Contraseña SSH", type="password")
-    if st.button("Conectar"):
-        ssh = conectar_ssh(usuario, clave)
+    usuario = st.text_input("Usuario SSH", value="logis_ti_1")
+    ruta_llave = st.text_input("Ruta a la llave privada (.pem)", value="C:/Voice/llave servidor voive/prd/jj_picking.pem")
+    if st.button("Conectar con llave privada"):
+        ssh = conectar_ssh_con_llave(usuario, ruta_llave)
         if ssh:
-            st.success("Conexión SSH exitosa")
+            st.success("Conexión SSH exitosa con llave")
             st.session_state.ssh = ssh
 elif menu == "Log Lydia" and st.session_state.ssh:
     site = st.selectbox("Seleccione Site", ["Guayaquil", "Quito"])
