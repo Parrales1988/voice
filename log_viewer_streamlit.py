@@ -7,7 +7,7 @@ import subprocess
 from datetime import datetime
 
 # --- CONFIGURACIÓN BASE ---
-DEFAULT_SSH_HOST = "192.168.1.100"  # Puedes reemplazar con tu IP predeterminada
+DEFAULT_SSH_HOST = "10.7.131.68"  # Puedes reemplazar con tu IP predeterminada
 SSH_PORT = 22
 ORACLE_HOST = "dlecd002.tia.com.ec"
 ORACLE_PORT = 1521
