@@ -83,9 +83,12 @@ if "ssh" not in st.session_state:
 
 if menu == "Login":
     usuario = st.text_input("Usuario SSH", value="logis_ti_1")
-    ruta_llave = st.text_input("Ruta a la llave privada (.pem)", value="C:/Voice/llave servidor voive/prd/jj_picking.pem")
-    if st.button("Conectar con llave privada"):
-        ssh = conectar_ssh_con_llave(usuario, ruta_llave)
+    archivo_llave = st.file_uploader("Sube tu archivo .pem", type=["pem"])
+
+    if archivo_llave and st.button("Conectar con llave privada"):
+        with open("llave_temp.pem", "wb") as f:
+            f.write(archivo_llave.read())
+        ssh = conectar_ssh_con_llave(usuario, "llave_temp.pem")
         if ssh:
             st.success("Conexión SSH exitosa con llave")
             st.session_state.ssh = ssh
