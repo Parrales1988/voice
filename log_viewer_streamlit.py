@@ -12,7 +12,7 @@ ORACLE_SID = "WMS"
 ORACLE_USER = "wms"
 ORACLE_PASSWORD = "wmstia2020"
 
-SSH_HOST = "alb-voicepicking.dev.aws.tia.com.ec"
+SSH_HOST = "10.7.131.68"
 SSH_PORT = 22
 
 # --- CONEXIÓN SSH CON LLAVE PRIVADA ---
